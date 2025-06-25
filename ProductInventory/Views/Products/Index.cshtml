@@ -5,12 +5,17 @@
 
 <div class="app-title">
     <div>
-        <h1><i class="bi bi-table"></i> Product</h1>
+        <h1><i class="bi bi-table"></i> Product List</h1>
     </div>
+    @if (TempData["Message"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Message"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
     <ul class="app-breadcrumb breadcrumb side">
         <li class="breadcrumb-item"><i class="bi bi-house-door fs-6"></i></li>
-        <li class="breadcrumb-item">Tables</li>
-        <li class="breadcrumb-item active"><a href="#">Data Table</a></li>
     </ul>
 </div>
 <div class="row">
@@ -39,8 +44,7 @@
                                     <td>@item.Quantity</td>
                                     <td>
                                         <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Edit</a>
-                                        @*   <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a> *@
-                                        <button class="btn btn-danger btn-sm" onclick="deleteProduct(@item.Id)">Delete</button>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>         
                                     </td>
                                 </tr>
                             }
@@ -51,30 +55,6 @@
         </div>
     </div>
 </div>
-
-
-@section Scripts {
-    <script>
-        function deleteProduct(id) {
-            if (confirm("Are you sure you want to delete this product?")) {
-                $.ajax({
-                    url: '/Products/Delete',
-                    type: 'POST',
-                    data: { id: id },
-                    success: function (result) {
-                        if (result.success) {
-                            location.reload(); // Or remove the row from table
-                        } else {
-                            alert("Delete failed.");
-                        }
-                    },
-                    error: function () {
-                        alert("Error occurred while deleting.");
-                    }
-                });
-            }
-        }
-    </script>
 
 
     <!-- Essential javascripts for application to work-->
