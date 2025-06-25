@@ -42,7 +42,14 @@ namespace ProductInventory.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(product);
-                await _context.SaveChangesAsync();
+                try
+                {
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", $"Error saving data: {ex.Message}");
+                }
                 return RedirectToAction(nameof(Index));
             }
             return View(product);

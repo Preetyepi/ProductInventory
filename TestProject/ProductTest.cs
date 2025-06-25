@@ -41,20 +41,36 @@ namespace TestProject
             Assert.NotNull(model);
             Assert.Equal(2, model.Count);
         }
-
         [Fact]
         public async Task Create_Post_ValidProduct_RedirectsToIndex()
         {
-            var context = GetDbContext();
+            // Arrange
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>()
+                .UseInMemoryDatabase(databaseName: "TestDb_" + Guid.NewGuid())
+                .Options;
+
+            using var context = new ApplicationDbContext(options);
             var controller = new ProductsController(context);
 
-            var product = new Product { Name = "Test Product", Price = 50 };
+            var product = new Product
+            {
+                Name = "Test Product",
+                Category = "Test",
+                Price = 100,
+                Quantity = 10
+            };
 
-            var result = await controller.Create(product) as RedirectToActionResult;
+            controller.ModelState.Clear(); // simulate valid input
 
-            Assert.NotNull(result);
-            Assert.Equal("Index", result.ActionName);
-            Assert.Single(context.Products.ToList());
+            // Act
+            var result = await controller.Create(product);
+
+            // Assert
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Equal("Index", redirectResult.ActionName);
+
+            var products = context.Products.ToList();
+            Assert.Single(products); // should now pass
         }
 
         [Fact]
