@@ -88,11 +88,18 @@ namespace TestProject
             Assert.False(controller.ModelState.IsValid);
         }
 
+
         [Fact]
         public async Task Edit_Get_ReturnsViewWithProduct()
         {
             var context = GetDbContext();
-            context.Products.Add(new Product { Id = 1, Name = "Product 1", Price = 100 });
+            context.Products.Add(new Product
+            {
+                Id = 1,
+                Name = "Product 1",
+                Price = 100,
+                Category = "Test Category" 
+            });
             context.SaveChanges();
 
             var controller = new ProductsController(context);
@@ -105,17 +112,33 @@ namespace TestProject
             Assert.Equal("Product 1", model.Name);
         }
 
+
         [Fact]
         public async Task Edit_Post_ValidProduct_RedirectsToIndex()
         {
             var context = GetDbContext();
-            var product = new Product { Id = 1, Name = "Old", Price = 20 };
+
+            // Add initial product with required Category
+            var product = new Product
+            {
+                Id = 1,
+                Name = "Old",
+                Price = 20,
+                Category = "Test Category"
+            };
             context.Products.Add(product);
             context.SaveChanges();
 
             var controller = new ProductsController(context);
 
-            var updated = new Product { Id = 1, Name = "Updated", Price = 30 };
+            // Update product with the same required Category
+            var updated = new Product
+            {
+                Id = 1,
+                Name = "Updated",
+                Price = 30,
+                Category = "Test Category" 
+            };
             var result = await controller.Edit(updated) as RedirectToActionResult;
 
             Assert.NotNull(result);
