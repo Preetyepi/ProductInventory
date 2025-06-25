@@ -1,0 +1,48 @@
+﻿@model Product
+@{
+    ViewData["Title"] = "Add Product";
+}
+
+<h2>@ViewData["Title"]</h2>
+<div class="row">
+    <div class="col-md-12">
+        <div class="tile">
+            <div class="row">
+                <div class="col-lg-6">
+                    <form asp-controller="Products" asp-action="Create">
+                        <div class="mb-3">
+                            <label class="form-label" for="Name">Name</label>
+                            <input class="form-control" asp-for="Name">
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="Price">Price</label>
+                            <input class="form-control" asp-for="Price">
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="Quantity">Quantity</label>
+                            <input class="form-control" asp-for="Quantity">
+                            <span asp-validation-for="Quantity" class="text-danger"></span>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" for="Category">Category</label>
+                            <input class="form-control" asp-for="Category">
+                            <span asp-validation-for="Category" class="text-danger"></span>
+                        </div>
+                        <div class="tile-footer">
+                            <button class="btn btn-primary" type="submit">Submit</button>
+                            <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
